@@ -10,6 +10,7 @@ export class AuthController {
 
     @Post("registration")
     registration(@Body()dto:CreateUserDTO) {
+        console.log(dto)
         return this.AuthService.registration(dto)
     }
 

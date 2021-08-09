@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { LoginUserDTO } from './dto/loginUser.dto';
@@ -14,8 +14,8 @@ export class UserController {
 
     
     @UseGuards(AuthGuard)
-    @Get("getAll")
-    getAll(){
-        return this.UserService.takeAll()
+    @Get("getUser")
+    getAll(@Req() req){
+        return this.UserService.findByIdWithoutPassword(req.user._id)
     }
 }

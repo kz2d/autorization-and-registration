@@ -21,6 +21,12 @@ export class UserService {
         return this.userModel.findOne({ 'email': email as string })
     }
 
+    async findByIdWithoutPassword(id:String){
+        let res=await this.userModel.findById(id)
+        res.password=""
+        return res
+    }
+
     takeAll(){
         return this.userModel.find()
     }

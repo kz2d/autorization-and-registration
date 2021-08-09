@@ -5,7 +5,7 @@ import * as mongoose from 'mongoose';
 
 export type CheckListDocument = CheckList & Document;
 
-@Schema()
+@Schema({ timestamps: { createdAt: 'created_at' } })
 export class CheckList {
   @Prop()
   text: string;
