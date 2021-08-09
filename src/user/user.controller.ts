@@ -1,23 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { LoginDTO } from './dto/login.dto';
-import { RegistrationDTO } from './dto/registration.dto';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { LoginUserDTO } from './dto/loginUser.dto';
+import { CreateUserDTO } from './dto/createUserDTO.dto';
+import { User, UserDocument } from './schemas/user.schemas';
 import { UserService } from './user.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
 
-    constructor(private UserService:UserService){}
+    constructor(private UserService:UserService,){}
 
-    @Post("registration")
-    registration(@Body()dto:RegistrationDTO) {
-        return this.UserService.registration(dto)
-    }
-
-    @Post("login")
-    login(@Body()dto:LoginDTO) {
-        return this.UserService.login(dto)
-    }
-
+    
+    @UseGuards(AuthGuard)
     @Get("getAll")
     getAll(){
         return this.UserService.takeAll()

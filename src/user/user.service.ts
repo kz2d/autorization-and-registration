@@ -1,26 +1,27 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { LoginDTO } from './dto/login.dto';
-import { RegistrationDTO } from './dto/registration.dto';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, Model, Mongoose } from 'mongoose';
+import { LoginUserDTO } from './dto/loginUser.dto';
+import { CreateUserDTO } from './dto/createUserDTO.dto';
+import { User, UserDocument } from './schemas/user.schemas';
 
 @Injectable()
 export class UserService {
-    u:RegistrationDTO[]=[]
+    u:CreateUserDTO[]=[]
 
+    constructor(@InjectConnection() private connection: Connection,
+    @InjectModel(User.name) private userModel: Model<UserDocument>){}
 
-    registration(dto:RegistrationDTO){
-        this.u.push(dto)
+    async create(dto: CreateUserDTO){
+        const user = await this.userModel.create(dto)
+        return user;
     }
 
-    login(dto:LoginDTO){
-        let user=this.u.find((e)=>e.email===dto.email)
-        if(!user)return "rejected"
-        if(user.password==dto.password){
-            return user
-        }
-        return "rejected"
+    findByEmail(email:String){
+        return this.userModel.findOne({ 'email': email as string })
     }
 
     takeAll(){
-        return this.u
+        return this.userModel.find()
     }
 }
